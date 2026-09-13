@@ -1,39 +1,49 @@
 # Roteiro do pitch
 
-## Narrativa de 5 minutos
+## Narrativa principal de até 3 minutos
 
-### 0:00–0:40 — problema
+O pitch separa claramente o que funciona hoje da evolução IoT. A demonstração do MVP ocupa a maior parte do tempo; ESP32 e MQTT entram como próximo experimento mensurável, não como funcionalidade já entregue.
+
+### 0:00–0:25 — problema
 
 "Comprar a passagem é simples. O difícil começa depois: quando sair, onde entrar, qual plataforma e o que fazer quando ela muda. Em um terminal desconhecido, essas decisões viram ansiedade e atraso."
 
 Apresentar uma fala real de entrevista, não uma estatística sem fonte.
 
-### 0:40–1:10 — solução
+### 0:25–0:45 — solução
 
-"O Embarque Fácil cria uma linha do tempo única entre a passagem e o assento. A jornada continua no celular, no totem e na operação sem o passageiro repetir dados."
+"O Embarque Fácil cria uma jornada única entre a passagem e o assento. Ela continua no celular, no totem e na operação sem obrigar o passageiro a recomeçar ou repetir dados."
 
-### 1:10–3:20 — demonstração
+### 0:45–1:45 — demonstração do MVP atual
 
-1. Login e próxima viagem.
-2. Checklist e recomendação de saída identificada como estimativa.
-3. App gera QR temporário e a jornada passa para o totem.
-4. Totem confirma a localização e mostra a rota acessível.
-5. Android abre a seta estilo Finder para o próximo marco, sem câmera.
-6. Colega publica troca de plataforma no dashboard.
-7. Alerta chega no Android e no totem; a rota é recomposta.
-8. Passageiro envia a rota de volta ao celular, confirma chegada e avalia.
+1. Abrir a próxima viagem e o checklist no Android.
+2. Gerar o QR temporário e transferir a jornada para o totem.
+3. Totem confirmar o ponto físico e mostrar o próximo passo acessível.
+4. Android abrir a seta estilo Finder, sem câmera, mantendo texto e QR como fallback.
+5. Operador mudar a plataforma no dashboard.
+6. Android e totem receberem o alerta e recomporem a rota.
 
-### 3:20–4:10 — valor e evidência
+Narrar uma única história; evitar explicar cada clique.
 
-Mostrar o funil real do teste: participantes, conclusão sem ajuda, tempo e principais erros. Se ainda não houver pesquisa, dizer "hipótese a validar".
+### 1:45–2:15 — valor e tecnologia
 
-### 4:10–4:40 — tecnologia
+Mostrar o funil real do teste: participantes, conclusão sem ajuda, tempo e principais erros. Se a pesquisa ainda não tiver ocorrido, dizer "hipótese a validar".
 
-Android nativo em Java para o passageiro, dois apps React separados para operação e totem, Spring Boot para regras e Appwrite como plataforma central de autenticação, dados, arquivos, realtime, push, Functions e hospedagem web. Destacar token de uso único, limpeza da sessão pública e ausência de biometria/localização contínua.
+Resumir a base técnica: Android nativo em Java, React para dashboard e totem, backend Java/Spring Boot e Appwrite para autenticação, dados, realtime, arquivos, mensagens, Function e hospedagem. Destacar handoff de uso único, sessão pública efêmera e ausência de biometria ou localização contínua.
 
-### 4:40–5:00 — próximos passos
+### 2:15–2:50 — evolução IoT plausível
 
-Piloto controlado em um terminal, medição da taxa de jornada concluída e integração com uma viação. NFC entra apenas se o piloto provar necessidade; a seta direcional evolui com calibração real do ambiente.
+"Hoje, o totem e os QR codes confirmam pontos físicos, enquanto a bússola aponta a direção. O próximo experimento adiciona marcos ESP32 por BLE para confirmar proximidade e sensores direcionais sem câmera para medir fluxo agregado. Os dispositivos publicam saúde e contagens por MQTT; o backend Java agrega os eventos no Appwrite. Assim, a operação identifica corredores congestionados ou dispositivos fora do ar e recomenda uma rota melhor, sem rastrear uma pessoa."
+
+Exibir um único diagrama ou uma gravação curta da simulação. Rotular na tela: **roadmap pós-MVP — simulação**, se ainda não houver hardware físico.
+
+### 2:50–3:00 — fechamento
+
+"Primeiro provamos que a jornada conectada reduz dúvida e atraso. Depois fazemos o terminal responder ao fluxo real. O Embarque Fácil não substitui o atendimento: faz cada canal compartilhar contexto e levar o passageiro ao lugar certo."
+
+## Extensão opcional para banca de 5 minutos
+
+Se houver dois minutos adicionais, usar um minuto para dados de validação e um minuto para demonstrar a simulação MQTT: ESP32 publica heartbeat e contagem, o Java processa, o Appwrite atualiza e o dashboard exibe o estado. Não ampliar a quantidade de funcionalidades do MVP durante a fala.
 
 ## Preparação da demo
 
@@ -47,6 +57,7 @@ Piloto controlado em um terminal, medição da taxa de jornada concluída e inte
 - Totem em tela cheia e QR de handoff testado.
 - Hotspot e rede alternativa.
 - Vídeo de backup de 60–90 segundos.
+- Um slide de roadmap IoT ou vídeo curto da simulação, sempre identificado como futuro.
 
 ## Respostas difíceis
 
@@ -56,7 +67,23 @@ Ainda não. O MVP usa dados controlados para validar a jornada; o passo comercia
 
 **"Como sabem a posição no terminal?"**
 
-Cada totem tem um ponto físico cadastrado; ao vincular a jornada, ele confirma a posição. QR codes intermediários complementam a rota. A seta usa a bússola apenas para apontar o próximo marco e declara sua confiança; ela não finge rastrear a posição dentro do prédio.
+No MVP, cada totem tem um ponto físico cadastrado e QR codes intermediários complementam a rota. A seta usa a bússola para apontar o próximo marco, mas não finge rastrear a pessoa. No futuro, marcos ESP32 por BLE poderão confirmar proximidade; QR e texto continuarão como fallback.
+
+**"O IoT já funciona?"**
+
+Ainda não faz parte do MVP validado. O próximo passo é simular mensagens MQTT e o consumidor Java; depois, testar poucos ESP32 em bancada. A implantação no terminal só ocorre se precisão, confiabilidade, privacidade e benefício forem comprovados.
+
+**"Como o fluxo será medido sem vigiar passageiros?"**
+
+Sensores direcionais infravermelhos ou ToF contam entradas e saídas de forma agregada. Não há câmera, reconhecimento facial, identificação Bluetooth do celular ou vínculo entre a contagem e uma viagem.
+
+**"Por que não usar GPS dentro do terminal?"**
+
+GPS perde precisão em ambientes internos. BLE serve para reconhecer proximidade de um marco conhecido, e a bússola indica a direção. Nenhuma dessas fontes trabalha sozinha: sequência de rota, confiança do sinal e fallback por QR evitam avanço incorreto.
+
+**"E se um ESP32 ou a rede cair?"**
+
+Heartbeat MQTT sinaliza a falha no dashboard. O sistema ignora a fonte indisponível e mantém totem, QR e instrução textual. A camada IoT melhora a experiência, mas não pode ser requisito para embarcar.
 
 **"E quem não tem celular?"**
 
@@ -64,8 +91,8 @@ O totem aceita o código/localizador da passagem demo, orienta e pode gerar um r
 
 **"Por que Appwrite e Java?"**
 
-Appwrite reduz o tempo de infraestrutura para autenticação, dados, arquivos, realtime, push e deploy. A API Java/Spring Boot mantém regras privilegiadas e cria uma fronteira estável para futuras integrações, usando tecnologias alinhadas ao curso.
+Appwrite reduz o tempo de infraestrutura para autenticação, dados, arquivos, realtime, push e deploy. A API Java/Spring Boot mantém regras privilegiadas e cria uma fronteira estável para futuras integrações, usando tecnologias alinhadas ao curso. Na evolução IoT, o Java também valida e agrega as mensagens MQTT antes de persistir estado útil no Appwrite.
 
 **"O que há de realmente inovador?"**
 
-Não é colocar mais uma tela no terminal. É preservar o contexto entre celular, totem e operação com um handoff temporário: o totem ancora a posição, o celular aponta o próximo marco sem câmera, mudanças operacionais recompõem a rota em todas as superfícies e pedidos de ajuda chegam com localização e viagem.
+Hoje, é preservar contexto entre celular, totem e operação com handoff temporário, orientação sem câmera e recomposição sincronizada da rota. A evolução transforma o terminal em uma fonte de contexto: marcos confirmam proximidade, fluxo agregado indica atrito e a operação recomenda caminhos melhores sem rastrear indivíduos.

@@ -129,3 +129,14 @@ Todo mundo revisa PR; uma pessoa é dona de cada história, não de uma camada i
 | Escopo voltar a crescer | P1 só começa após todos os P0 verdes |
 | Appwrite mal configurado | checklist versionado e teste de permissão |
 | Ausência de designer | reutilizar tokens do protótipo e validar tarefas |
+
+## Próximos passos após o pitch
+
+1. Congelar e medir a versão atual antes de adicionar hardware.
+2. Executar testes com passageiros e registrar tempo, abandono, pedidos de ajuda e erros de direção.
+3. Construir a simulação ESP32/MQTT com eventos marcados como sintéticos.
+4. Integrar o consumidor MQTT ao backend Java e refletir saúde/fluxo no Appwrite e dashboard.
+5. Fazer bancada com poucos dispositivos físicos e comparar leituras com contagem manual.
+6. Só então propor piloto controlado no terminal, com autorização, levantamento de energia, rede, fixação, segurança, acessibilidade e privacidade.
+
+As fases, métricas, materiais e critérios de decisão estão em [Próximos passos de IoT](07-proximos-passos-iot.md).

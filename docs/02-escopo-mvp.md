@@ -38,6 +38,17 @@ O MVP só precisa provar uma história completa:
 ## Fora do MVP
 
 - Bilhetagem/pagamento, biometria, AR, gamificação, chat com IA, previsão de fila, integração com apps de transporte e integração real com transportadoras. NFC é P1 e nunca o único caminho.
+- ESP32, BLE, broker MQTT e sensores de fluxo são uma evolução pós-MVP. No pitch, podem aparecer apenas como arquitetura futura ou simulação explicitamente identificada; não entram nos critérios de aceite do produto atual.
+
+## P2 — evolução IoT condicionada à validação
+
+- ESP32 em marcos fixos emitindo identificadores BLE para confirmar proximidade no Android.
+- ESP32 com sensores duplos infravermelhos ou ToF contando entradas e saídas por zona, sem câmera e sem identificar passageiros.
+- MQTT com TLS para heartbeat, telemetria e eventos dos dispositivos.
+- Serviço de ingestão no backend Java para validar, deduplicar, agregar e persistir eventos úteis no Appwrite.
+- Dashboard com mapa de saúde dos dispositivos, última comunicação, alimentação, calibração e confiança da leitura.
+- Condições de rota derivadas de indisponibilidade ou congestionamento agregado, sempre com confirmação operacional e fallback por QR.
+- Simulação em Wokwi e broker de testes antes de comprar hardware ou instalar qualquer dispositivo no terminal.
 
 ## Critérios de aceite da demonstração
 

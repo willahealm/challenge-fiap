@@ -95,6 +95,14 @@ Quem não tem o app pode consultar por QR/código da passagem, receber orientaç
 
 Depois que um totem ou QR ancora a posição, o Android mostra uma seta grande apontando para o próximo marco da rota. A direção usa bússola/giroscópio e vem acompanhada por texto e distância aproximada. Se a confiança do sensor estiver baixa, o app pede calibração ou retorna ao passo a passo; portanto, não depende de AR nem promete localização indoor centimétrica.
 
+### 7. Terminal sensível ao contexto com IoT, após o MVP
+
+Uma evolução combina marcos ESP32 com BLE, telemetria MQTT e sensores direcionais de passagem. O celular passa a confirmar que se aproximou do próximo marco; a operação enxerga dispositivos indisponíveis e fluxo agregado por zona; e a rota pode evitar um corredor temporariamente congestionado.
+
+Essa camada não promete localização centimétrica nem rastreamento individual. BLE confirma proximidade, enquanto a bússola continua indicando a direção. Contadores infravermelhos ou ToF medem entradas e saídas sem imagem, rosto, Bluetooth pessoal ou identidade do passageiro. QR, texto e totem permanecem como fallback quando o sensor, a rede ou o aparelho não colaborarem.
+
+O conceito será validado primeiro em simulador MQTT e bancada. Somente depois de medir precisão, falsos avanços, disponibilidade e benefício para o passageiro ele deve entrar em um piloto de terminal. O plano detalhado está em [Próximos passos de IoT](07-proximos-passos-iot.md).
+
 ## Métrica norte
 
 **Taxa de jornada assistida concluída:** percentual de viagens em que o usuário abre a jornada, confirma um ponto do terminal e chega à plataforma.

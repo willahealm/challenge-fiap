@@ -47,6 +47,7 @@ Nesta entrega, o Appwrite é a plataforma hospedada: Sites serve as duas interfa
 - [Arquitetura e Appwrite](docs/04-arquitetura.md)
 - [Backlog e plano de execução](docs/05-backlog.md)
 - [Roteiro do pitch](docs/06-pitch.md)
+- [Próximos passos de IoT](docs/07-proximos-passos-iot.md)
 - [Checklist do Appwrite](appwrite/README.md)
 
 ## Executar o MVP
@@ -93,6 +94,7 @@ Use `npm run build`, `npm run lint` e `npm test` para validar a Web. Os READMEs 
 - Android Java/XML: fluxo completo, gateway da Function Appwrite, modo offline, QR/código, orientação por sensor e APK validado para Android 8–16.
 - Contratos: OpenAPI, JSON Schema e tipos TypeScript em `packages/contracts`.
 - Appwrite Cloud: Database, Function Node 22 e dois Sites ativos; autenticação demo demonstrável e estado persistente compartilhado. Auth real por usuário permanece como evolução pós-MVP.
+- Evolução IoT: planejada para depois da validação do MVP, com ESP32, BLE, MQTT e sensores de fluxo agregado, sem rastrear pessoas individualmente.
 
 ## Regra de entrega
 

@@ -119,6 +119,40 @@ O Appwrite usa IDs nativos como chave. Criar índices para `ownerId + departureA
 
 Cada trecho curado possui um azimute esperado (`headingDegrees`). O Android calcula a menor diferença angular entre o azimute e a orientação filtrada do aparelho, anima a seta e exibe a instrução textual. Um filtro de suavização reduz tremor. A confiança considera precisão reportada pelo sensor e variação das últimas leituras. O recurso é auxílio visual: checkpoint e instrução textual continuam sendo a fonte de verdade.
 
+## Evolução de arquitetura com ESP32 e MQTT
+
+```text
+ESP32 BLE (marcos) ───────────────> Android Java ──> checkpoint por proximidade
+
+ESP32 + sensores ToF/IR ── MQTT/TLS ──> Backend Java ──> Appwrite Database
+        heartbeat e fluxo                  │                    │
+                                           └─ regras de rota    └─ Realtime
+                                                                  │
+                                      Android / Totem / Dashboard <┘
+```
+
+O Appwrite continua sendo a fonte de verdade da jornada e da operação, mas não assume o papel de broker MQTT. Um broker dedicado, como Mosquitto, EMQX ou HiveMQ, recebe os eventos. O backend Java assina os tópicos, autentica o dispositivo, rejeita mensagens antigas ou duplicadas, agrega janelas de fluxo e grava somente o estado operacional necessário no Appwrite. Telemetria bruta de alta frequência deve ter retenção curta e não ser enviada diretamente aos clientes.
+
+Tópicos iniciais:
+
+- `terminals/{terminalId}/devices/{deviceId}/status`: presença, firmware e último heartbeat.
+- `terminals/{terminalId}/devices/{deviceId}/telemetry`: métricas técnicas e qualidade do sensor.
+- `terminals/{terminalId}/zones/{zoneId}/flow`: contagens agregadas de entrada e saída.
+- `terminals/{terminalId}/devices/{deviceId}/commands`: configuração assinada; nunca dados de passageiro.
+
+Coleções futuras no Appwrite:
+
+| Coleção | Campos principais | Finalidade |
+|---|---|---|
+| `iot_devices` | `deviceId`, `terminalId`, `pointId`, `type`, `status`, `lastSeenAt`, `firmwareVersion` | inventário e saúde |
+| `occupancy_windows` | `zoneId`, `entered`, `exited`, `occupancy`, `confidence`, `windowStart` | fluxo agregado |
+| `route_conditions` | `edgeId`, `status`, `reason`, `confidence`, `expiresAt` | bloqueio ou penalidade temporária |
+| `iot_incidents` | `deviceId`, `type`, `openedAt`, `resolvedAt` | manutenção e auditoria |
+
+Cada ESP32 recebe credencial própria, usa MQTT sobre TLS, publica apenas em seus tópicos e pode ser revogado individualmente. Nenhum evento IoT contém `userId`, localizador de passagem, MAC do celular ou dado biométrico. A associação entre o celular e o marco BLE é processada localmente; o servidor recebe apenas uma confirmação consentida de checkpoint.
+
+O avanço automático só ocorre quando a proximidade BLE, a qualidade do sinal e a sequência da rota são coerentes. Se a confiança for baixa, o app pede confirmação ou oferece QR. Alterações por fluxo nunca fecham uma rota sozinhas no primeiro piloto: geram recomendação para o operador aprovar.
+
 ## Ambientes
 
 Usar três configurações: local, demo/pitch e produção. Para o pitch, congelar seed e versão pelo menos 24 horas antes. O project ID fornecido pode ser usado como ambiente demo; não misturar dados pessoais reais.
