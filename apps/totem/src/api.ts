@@ -1,6 +1,6 @@
 import { addHelpRequest, seedState, type DemoState, type HelpCategory } from '@embarque-facil/web-core'
 
-const explicitApi = import.meta.env.VITE_TOTEM_API_URL as string | undefined
+const explicitApi = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_TOTEM_API_URL) as string | undefined
 const apiBase = explicitApi || '/demo-api'
 export const totemId = (import.meta.env.VITE_TOTEM_ID as string | undefined) || 'totem-tiete-01'
 const sharedDemo = !explicitApi || apiBase.includes(':3100')
@@ -49,13 +49,17 @@ export async function consumeCode(code: string): Promise<{ state: DemoState; off
   }
 }
 
-export function subscribeState(onState: (state: DemoState) => void): () => void {
+export function subscribeState(onState: (state: DemoState) => void, onExpired?: () => void): () => void {
   if (sharedDemo) {
     const events = new EventSource(`${apiBase}/events`); events.onmessage = (event) => onState(JSON.parse(event.data)); return () => events.close()
   }
   const poll = setInterval(async () => {
     if (!kioskToken) return
-    try { const response = await fetch(`${apiBase}/v1/trips/trip-demo/journey`, { headers: { Authorization: `Bearer ${kioskToken}` } }); if (response.ok) onState(mapJourney(await response.json())) } catch { /* keep last useful state */ }
+    try {
+      const response = await fetch(`${apiBase}/v1/trips/trip-demo/journey`, { headers: { Authorization: `Bearer ${kioskToken}` } })
+      if (response.status === 401) { kioskToken = ''; onExpired?.(); return }
+      if (response.ok) onState(mapJourney(await response.json()))
+    } catch { /* keep last useful state */ }
   }, 2000)
   return () => clearInterval(poll)
 }
@@ -70,7 +74,12 @@ export async function requestHelp(state: DemoState, category: HelpCategory): Pro
   } catch { return addHelpRequest(state, category, totemId) }
 }
 
-export function clearKioskSession() { kioskToken = '' }
+export async function clearKioskSession() {
+  const token = kioskToken
+  kioskToken = ''
+  if (sharedDemo || !token) return
+  try { await fetch(`${apiBase}/v1/auth/session`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }) } catch { /* visible session is already cleared */ }
+}
 
 export async function touchKioskSession() {
   if (sharedDemo || !kioskToken || Date.now() - lastTouch < 3000) return

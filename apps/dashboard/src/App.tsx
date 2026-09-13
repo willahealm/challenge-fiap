@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { helpCategoryLabels, relativeTime, type DemoState, type HelpRequest, type Trip } from '@embarque-facil/web-core'
-import { changeHelpStatus, loadState, publishPlatform, resetDemo, signIn, subscribe, type Session } from './api'
+import { changeHelpStatus, loadState, publishPlatform, resetDemo, signIn, signOut, subscribe, type Session } from './api'
 import { Icon } from './icons'
 
 type View = 'overview' | 'trips' | 'alerts' | 'help'
@@ -96,10 +96,10 @@ function App() {
     finally { setLoading(false) }
   }
   useEffect(() => { void refresh() }, [session])
-  useEffect(() => session ? subscribe(setState) : undefined, [session])
+  useEffect(() => session ? subscribe(setState, session.accessToken) : undefined, [session])
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 3500); return () => clearTimeout(timer) }, [toast])
   const login = (next: Session) => { sessionStorage.setItem('ef:operator', JSON.stringify(next)); setSession(next) }
-  const logout = () => { sessionStorage.removeItem('ef:operator'); setSession(null); setState(null) }
+  const logout = () => { void signOut(session?.accessToken); sessionStorage.removeItem('ef:operator'); setSession(null); setState(null) }
   const filtered = useMemo(() => (state?.trips || []).filter((trip) => {
     const term = `${trip.origin} ${trip.destination} ${trip.code} ${trip.company}`.toLowerCase()
     return term.includes(search.toLowerCase()) && (status === 'all' || trip.status === status)
@@ -133,7 +133,7 @@ function App() {
         {view === 'trips' && <section className="panel page-panel"><div className="toolbar"><label><Icon name="search"/><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar rota, código ou viação"/></label><select value={status} onChange={(event) => setStatus(event.target.value)}><option value="all">Todos os status</option><option value="on-time">No horário</option><option value="boarding">Embarcando</option><option value="attention">Atenção</option></select></div><TripTable trips={filtered} onSelect={setSelectedTrip}/></section>}
         {view === 'help' && <section className="help-list">{state.helpRequests.length ? state.helpRequests.map((request) => <HelpCard key={request.id} request={request} onStatus={(next) => void helpStatus(request.id, next)}/>) : <div className="panel quiet-state large"><span><Icon name="check"/></span><h2>Nenhum pedido pendente</h2><p>Quando alguém pedir apoio em um totem, o contexto aparecerá aqui.</p></div>}</section>}
         {view === 'alerts' && <section className="panel alerts-list"><div className="panel-head"><div><h2>Histórico de alertas</h2><p>Comunicações publicadas nesta operação</p></div></div>{state.alerts.map((alert) => { const trip = state.trips.find((item) => item.id === alert.tripId); return <article key={alert.id}><span className={`alert-symbol ${alert.severity}`}><Icon name="bell"/></span><div><strong>{alert.message}</strong><p>{trip?.departureTime} · {trip?.origin} → {trip?.destination}</p></div><time>{relativeTime(alert.createdAt)}</time></article> })}</section>}
-        <button className="reset-demo" onClick={async () => { setState(await resetDemo()); setToast('Demonstração restaurada para a plataforma 18.') }}><Icon name="refresh" size={16}/>Restaurar demo</button>
+        <button className="reset-demo" onClick={async () => { const result = await resetDemo(session.accessToken); setState(result.state); if (result.session) login(result.session); setToast('Demonstração restaurada para a plataforma 18.') }}><Icon name="refresh" size={16}/>Restaurar demo</button>
       </>}
     </main>
     {selectedTrip && <PlatformModal trip={selectedTrip} onClose={() => setSelectedTrip(null)} onConfirm={confirmPlatform}/>} {toast && <div className="toast"><span><Icon name="check"/></span>{toast}</div>}

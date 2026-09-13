@@ -18,7 +18,7 @@ Conta demo: `operador@demo.local` / `Operador123!` (o botão de demonstração p
 Sem configuração, o app usa `http://localhost:3100`, que sincroniza a troca de plataforma e os chamados com o totem. Para usar a API Java, crie `apps/dashboard/.env.local`:
 
 ```env
-VITE_API_URL=http://localhost:8080
+VITE_API_BASE_URL=http://127.0.0.1:8080
 ```
 
-Se a API não responder, o app sinaliza o modo offline e mantém uma cópia seed local para o pitch.
+Se a API não responder, o app sinaliza o modo offline e mantém uma cópia seed local para o pitch. `VITE_API_URL` continua aceito como alias legado.

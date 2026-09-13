@@ -80,8 +80,8 @@ export default function App() {
   const [helpSent, setHelpSent] = useState<HelpCategory | null>(null)
   const [idle, setIdle] = useState(30)
   const active = !['welcome', 'done'].includes(screen)
-  const end = () => { clearKioskSession(); setState(null); setHelpSent(null); setScreen('done'); setIdle(30); setTimeout(() => setScreen('welcome'), 3500) }
-  useEffect(() => state ? subscribeState(setState) : undefined, [Boolean(state)])
+  const end = () => { void clearKioskSession(); setState(null); setHelpSent(null); setScreen('done'); setIdle(30); setTimeout(() => setScreen('welcome'), 3500) }
+  useEffect(() => state ? subscribeState(setState, end) : undefined, [Boolean(state)])
   useEffect(() => {
     if (!active) return
     const reset = () => { setIdle(30); void touchKioskSession() }

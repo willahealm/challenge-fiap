@@ -1,6 +1,6 @@
 import { seedState, setHelpStatus, updatePlatform, type DemoState, type HelpStatus } from '@embarque-facil/web-core'
 
-const explicitApi = import.meta.env.VITE_API_URL as string | undefined
+const explicitApi = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL) as string | undefined
 export const apiBase = explicitApi || '/demo-api'
 const storageKey = 'embarque-facil:dashboard:v1'
 const isSharedDemo = !explicitApi || apiBase.includes(':3100')
@@ -36,6 +36,11 @@ export async function signIn(email: string, password: string): Promise<Session> 
   return response.json()
 }
 
+export async function signOut(token?: string): Promise<void> {
+  if (isSharedDemo || !token) return
+  try { await fetch(`${apiBase}/v1/auth/session`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }) } catch { /* local state is cleared regardless */ }
+}
+
 export async function loadState(token?: string): Promise<{ state: DemoState; offline: boolean }> {
   try {
     if (isSharedDemo) {
@@ -50,14 +55,20 @@ export async function loadState(token?: string): Promise<{ state: DemoState; off
     if (!tripsResponse.ok || !helpResponse.ok) throw new Error()
     const trips = (await tripsResponse.json()).map(mapTrip)
     const helpRequests = (await helpResponse.json()).map(mapHelp)
-    return { state: { ...seedState(), trips, helpRequests, updatedAt: new Date().toISOString() }, offline: false }
+    return { state: { ...seedState(), trips, alerts: [], helpRequests, updatedAt: new Date().toISOString() }, offline: false }
   } catch {
     return { state: localRead(), offline: true }
   }
 }
 
-export function subscribe(onState: (state: DemoState) => void): () => void {
-  if (!isSharedDemo) return () => undefined
+export function subscribe(onState: (state: DemoState) => void, token?: string): () => void {
+  if (!isSharedDemo) {
+    const timer = window.setInterval(async () => {
+      const result = await loadState(token)
+      if (!result.offline) onState(result.state)
+    }, 2000)
+    return () => window.clearInterval(timer)
+  }
   const events = new EventSource(`${apiBase}/events`)
   events.onmessage = (event) => onState(JSON.parse(event.data))
   return () => events.close()
@@ -83,9 +94,19 @@ export async function changeHelpStatus(state: DemoState, requestId: string, stat
   } catch { return localWrite(setHelpStatus(state, requestId, status)) }
 }
 
-export async function resetDemo(): Promise<DemoState> {
+export async function resetDemo(token?: string): Promise<{ state: DemoState; session?: Session }> {
   try {
-    if (isSharedDemo) { const response = await fetch(`${apiBase}/reset`, { method: 'POST' }); if (response.ok) return response.json() }
+    if (isSharedDemo) {
+      const response = await fetch(`${apiBase}/reset`, { method: 'POST' })
+      if (response.ok) return { state: await response.json() }
+    } else if (token) {
+      const response = await fetch(`${apiBase}/v1/demo/reset`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
+      if (response.ok) {
+        const session = await signIn('operador@demo.local', 'Operador123!')
+        const result = await loadState(session.accessToken)
+        return { state: result.state, session }
+      }
+    }
   } catch { /* local reset below */ }
-  return localWrite(seedState())
+  return { state: localWrite(seedState()) }
 }

@@ -16,8 +16,8 @@ Abra `http://localhost:5174` e use o código `EF4821`. O comando também inicia 
 Para usar a API Java, crie `apps/totem/.env.local`:
 
 ```env
-VITE_TOTEM_API_URL=http://localhost:8080
+VITE_API_BASE_URL=http://127.0.0.1:8080
 VITE_TOTEM_ID=totem-tiete-01
 ```
 
-O totem não persiste token, passageiro ou localizador. O token kiosk fica apenas em memória e é descartado ao encerrar ou expirar a sessão.
+O totem não persiste token, passageiro ou localizador. O token kiosk fica apenas em memória e é descartado ao encerrar ou expirar a sessão. `VITE_TOTEM_API_URL` continua aceito como alias legado.
