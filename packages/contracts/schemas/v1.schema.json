@@ -1,0 +1,783 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://embarque.example/contracts/v1.schema.json",
+  "$defs": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "PASSENGER",
+            "OPERATOR",
+            "TOTEM",
+            "KIOSK"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role"
+      ],
+      "additionalProperties": false
+    },
+    "LoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ],
+      "additionalProperties": false
+    },
+    "AuthResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "tokenType": {
+          "type": "string",
+          "enum": [
+            "Bearer"
+          ]
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user": {
+          "$ref": "#/$defs/User"
+        }
+      },
+      "required": [
+        "accessToken",
+        "tokenType",
+        "expiresAt",
+        "user"
+      ],
+      "additionalProperties": false
+    },
+    "Trip": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "terminalId": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "destination": {
+          "type": "string"
+        },
+        "departureAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "carrier": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ON_TIME",
+            "DELAYED",
+            "BOARDING"
+          ]
+        },
+        "activeJourneys": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "id",
+        "terminalId",
+        "origin",
+        "destination",
+        "departureAt",
+        "carrier",
+        "platform",
+        "status",
+        "activeJourneys"
+      ],
+      "additionalProperties": false
+    },
+    "Checklist": {
+      "type": "object",
+      "properties": {
+        "document": {
+          "type": "boolean"
+        },
+        "ticket": {
+          "type": "boolean"
+        },
+        "luggage": {
+          "type": "boolean"
+        },
+        "departureTime": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document",
+        "ticket",
+        "luggage",
+        "departureTime"
+      ],
+      "additionalProperties": false
+    },
+    "Journey": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "tripId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "currentPointId": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "PREPARING",
+            "AT_TERMINAL",
+            "COMPLETED"
+          ]
+        },
+        "checklist": {
+          "$ref": "#/$defs/Checklist"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "tripId",
+        "userId",
+        "currentPointId",
+        "stage",
+        "checklist",
+        "updatedAt"
+      ],
+      "additionalProperties": false
+    },
+    "Step": {
+      "type": "object",
+      "properties": {
+        "pointId": {
+          "type": "string"
+        },
+        "instruction": {
+          "type": "string"
+        },
+        "distanceMeters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "headingDegrees": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 359
+        }
+      },
+      "required": [
+        "pointId",
+        "instruction",
+        "distanceMeters",
+        "headingDegrees"
+      ],
+      "additionalProperties": false
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "terminalId": {
+          "type": "string"
+        },
+        "fromPointId": {
+          "type": "string"
+        },
+        "toPointId": {
+          "type": "string"
+        },
+        "accessible": {
+          "type": "boolean"
+        },
+        "distanceMeters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "headingDegrees": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 359
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Step"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "terminalId",
+        "fromPointId",
+        "toPointId",
+        "accessible",
+        "distanceMeters",
+        "headingDegrees",
+        "steps"
+      ],
+      "additionalProperties": false
+    },
+    "Alert": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "tripId": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "INFO",
+            "PLATFORM_CHANGE",
+            "DELAY",
+            "BOARDING"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "INFO",
+            "WARNING",
+            "CRITICAL"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "previousPlatform": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "tripId",
+        "type",
+        "severity",
+        "message",
+        "previousPlatform",
+        "platform",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    },
+    "JourneyView": {
+      "type": "object",
+      "properties": {
+        "journey": {
+          "$ref": "#/$defs/Journey"
+        },
+        "trip": {
+          "$ref": "#/$defs/Trip"
+        },
+        "route": {
+          "$ref": "#/$defs/Route"
+        },
+        "alerts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Alert"
+          }
+        }
+      },
+      "required": [
+        "journey",
+        "trip",
+        "route",
+        "alerts"
+      ],
+      "additionalProperties": false
+    },
+    "ChecklistRequest": {
+      "type": "object",
+      "properties": {
+        "checklist": {
+          "type": "object",
+          "properties": {
+            "document": {
+              "type": "boolean"
+            },
+            "ticket": {
+              "type": "boolean"
+            },
+            "luggage": {
+              "type": "boolean"
+            },
+            "departureTime": {
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "additionalProperties": false,
+          "minProperties": 1
+        }
+      },
+      "required": [
+        "checklist"
+      ],
+      "additionalProperties": false
+    },
+    "CheckpointRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "examples": [
+            "TIETE-TOTEM-01"
+          ]
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false
+    },
+    "HandoffResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Opaque 256-bit token. QR content is the raw token. Never log it."
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 6,
+          "description": "Manual uppercase code; same single-use authorization as token.",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "token",
+        "code",
+        "expiresAt"
+      ],
+      "additionalProperties": false
+    },
+    "ConsumeRequest": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "token"
+      ],
+      "additionalProperties": false
+    },
+    "ConsumeResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "journey": {
+          "$ref": "#/$defs/Journey"
+        },
+        "trip": {
+          "$ref": "#/$defs/Trip"
+        },
+        "route": {
+          "$ref": "#/$defs/Route"
+        },
+        "alerts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Alert"
+          }
+        }
+      },
+      "required": [
+        "accessToken",
+        "expiresAt",
+        "journey",
+        "trip",
+        "route",
+        "alerts"
+      ],
+      "additionalProperties": false
+    },
+    "AlertRequest": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "INFO",
+            "PLATFORM_CHANGE",
+            "DELAY",
+            "BOARDING"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "INFO",
+            "WARNING",
+            "CRITICAL"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "platform": {
+          "type": "string",
+          "enum": [
+            "18",
+            "21"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "severity",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "HelpRequestBody": {
+      "type": "object",
+      "properties": {
+        "journeyId": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "MOBILITY",
+            "VISION_HEARING",
+            "TRIP_INFO",
+            "SECURITY"
+          ]
+        }
+      },
+      "required": [
+        "category"
+      ],
+      "additionalProperties": false
+    },
+    "HelpRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "journeyId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tripId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "totemId": {
+          "type": "string"
+        },
+        "pointId": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "MOBILITY",
+            "VISION_HEARING",
+            "TRIP_INFO",
+            "SECURITY"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "OPEN",
+            "ACKNOWLEDGED",
+            "RESOLVED"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "journeyId",
+        "tripId",
+        "totemId",
+        "pointId",
+        "category",
+        "status",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    },
+    "HelpStatusRequest": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "ACKNOWLEDGED",
+            "RESOLVED"
+          ]
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "FeedbackRequest": {
+      "type": "object",
+      "properties": {
+        "journeyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rating": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "maxItems": 5
+        },
+        "comment": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "journeyId",
+        "rating"
+      ],
+      "additionalProperties": false
+    },
+    "Feedback": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "journeyId": {
+          "type": "string"
+        },
+        "rating": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "comment": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "journeyId",
+        "rating",
+        "tags",
+        "comment",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    },
+    "Point": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "terminalId": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "terminalId",
+        "code",
+        "name",
+        "kind"
+      ],
+      "additionalProperties": false
+    },
+    "ApiError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "timestamp"
+      ],
+      "additionalProperties": false
+    },
+    "StatusResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "ResetResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "RESET"
+          ]
+        },
+        "tripId": {
+          "type": "string"
+        },
+        "journeyId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "tripId",
+        "journeyId"
+      ],
+      "additionalProperties": false
+    },
+    "Health": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "SessionExpiry": {
+      "properties": {
+        "expiresAt": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "expiresAt"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

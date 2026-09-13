@@ -1,0 +1,12 @@
+{
+  "name": "@embarque/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "types": "./index.ts",
+  "exports": {
+    ".": { "types": "./index.ts" },
+    "./openapi.json": "./openapi.json",
+    "./schemas/v1.schema.json": "./schemas/v1.schema.json"
+  }
+}
