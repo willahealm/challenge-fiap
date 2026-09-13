@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Embarque Fácil</string>
+    <string name="demo_email">lucas@demo.local</string>
+    <string name="demo_password">Demo123!</string>
+    <string name="content_arrow">Seta indicando a direção do próximo marco</string>
+</resources>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_padding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Minha jornada"
+            android:textAppearance="@style/TextAppearance.EmbarqueFacil.Title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/sync_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Atualização automática a cada 2 s"
+                android:textColor="@color/ef_muted"
+                android:textSize="12sp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/refresh_button"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Atualizar" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="24dp" />
+
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:accessibilityLiveRegion="polite"
+            android:textColor="@color/ef_error"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/content_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/alert_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/ef_warning_bg"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="@color/ef_warning"
+                app:strokeWidth="1dp">
+                <TextView
+                    android:id="@+id/alert_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textColor="@color/ef_warning"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/route_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:textColor="@color/ef_text"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/platform_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/ef_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/location_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/ef_muted" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Linha do tempo"
+                android:textAppearance="@style/TextAppearance.EmbarqueFacil.Section" />
+            <TextView
+                android:id="@+id/timeline_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:lineSpacingExtra="8dp"
+                android:padding="16dp"
+                android:text="● Preparar\n○ Sair de casa\n○ Chegar ao terminal\n○ Embarcar"
+                android:textColor="@color/ef_text"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Checklist de embarque"
+                android:textAppearance="@style/TextAppearance.EmbarqueFacil.Section" />
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_document"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="48dp" android:text="Documento com foto" />
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_ticket"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="48dp" android:text="Passagem no celular" />
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_luggage"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="48dp" android:text="Bagagem identificada" />
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/check_time"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="48dp" android:text="Planejar chegada com 30 min de antecedência" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/scanner_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Confirmar localização por QR" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/direction_button"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Abrir direção até a plataforma" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/handoff_button"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Continuar em um totem" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/complete_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="22dp"
+                android:text="Cheguei à plataforma" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.EmbarqueFacil" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/ef_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/ef_secondary</item>
+        <item name="android:colorBackground">@color/ef_surface</item>
+        <item name="colorSurface">@color/ef_card</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:statusBarColor">@color/ef_primary_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="materialButtonStyle">@style/Widget.EmbarqueFacil.Button</item>
+    </style>
+
+    <style name="Widget.EmbarqueFacil.Button" parent="Widget.Material3.Button">
+        <item name="android:minHeight">52dp</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextAppearance.EmbarqueFacil.Title" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/ef_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.EmbarqueFacil.Section" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/ef_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

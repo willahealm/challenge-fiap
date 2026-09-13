@@ -1,0 +1,12 @@
+plugins {
+    id "com.android.application" version "9.0.1" apply false
+}
+
+// OneDrive may transiently lock generated files. CI/local callers can redirect only build output.
+def externalBuild = providers.gradleProperty("buildOutput")
+if (externalBuild.isPresent()) {
+    layout.buildDirectory.set(file("${externalBuild.get()}/root"))
+    subprojects {
+        layout.buildDirectory.set(file("${externalBuild.get()}/${name}"))
+    }
+}

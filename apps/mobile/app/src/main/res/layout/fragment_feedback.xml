@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_padding">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Você chegou!"
+            android:textAppearance="@style/TextAppearance.EmbarqueFacil.Title" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Como foi encontrar sua plataforma?"
+            android:textColor="@color/ef_muted"
+            android:textSize="17sp" />
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:rating="5"
+            android:stepSize="1" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="O que mais ajudou?"
+            android:textColor="@color/ef_text"
+            android:textStyle="bold" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tag_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:singleSelection="true">
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tag_orientation" style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Orientação" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tag_information" style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Informação" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tag_accessibility" style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Acessibilidade" />
+        </com.google.android.material.chip.ChipGroup>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:hint="Comentário opcional">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/comment_input"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:gravity="top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="1000" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/ef_error"
+            android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="Enviar avaliação" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/skip_button"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agora não" />
+    </LinearLayout>
+</ScrollView>

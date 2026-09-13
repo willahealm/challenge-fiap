@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ef_primary">#0057B8</color>
+    <color name="ef_primary_dark">#003B7A</color>
+    <color name="ef_secondary">#00A67E</color>
+    <color name="ef_surface">#F7F9FC</color>
+    <color name="ef_card">#FFFFFF</color>
+    <color name="ef_text">#172033</color>
+    <color name="ef_muted">#5D687A</color>
+    <color name="ef_warning">#9A5B00</color>
+    <color name="ef_warning_bg">#FFF4D6</color>
+    <color name="ef_success">#157347</color>
+    <color name="ef_error">#B42318</color>
+    <color name="ef_outline">#CBD3DF</color>
+    <color name="white">#FFFFFF</color>
+</resources>
