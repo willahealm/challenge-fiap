@@ -69,14 +69,22 @@ public class DemoRepository implements JourneyRepository {
                 details.route.steps.get(0).title = "Corredor do setor C";
                 details.route.steps.get(0).instruction = "Vire à direita e siga as placas azuis do setor C.";
                 details.route.steps.get(0).headingDegrees = 92f;
+                if (details.route.steps.size() > 1) {
+                    details.route.steps.get(1).title = "Painel do setor C";
+                    details.route.steps.get(1).instruction = "Procure no painel do setor C a indicação da plataforma 21.";
+                }
+                RouteStep arrival = details.route.steps.get(details.route.steps.size() - 1);
+                arrival.title = "Plataforma 21";
+                arrival.instruction = "Siga pelo corredor até a plataforma 21.";
             }
         }
         later(() -> callback.onSuccess(details));
     }
 
     @Override public void updateChecklist(String journeyId, Map<String, Boolean> checklist, ResultCallback<ApiMessage> callback) {
-        details.journey.checklist.clear();
-        details.journey.checklist.putAll(checklist);
+        // The ViewModel may pass the same map held by details; copy before
+        // updating it so saving does not erase the checked items.
+        details.journey.checklist = new LinkedHashMap<>(checklist);
         for (Map.Entry<String, Boolean> item : checklist.entrySet()) {
             store.preferences().edit().putBoolean("demo_check_" + item.getKey(), item.getValue()).apply();
         }

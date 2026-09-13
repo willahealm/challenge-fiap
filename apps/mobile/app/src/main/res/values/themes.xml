@@ -8,8 +8,8 @@
         <item name="colorSurface">@color/ef_card</item>
         <item name="android:fontFamily">sans</item>
         <item name="android:navigationBarColor">@color/white</item>
-        <item name="android:statusBarColor">@color/ef_primary_dark</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/ef_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowActionModeOverlay">true</item>
         <item name="materialButtonStyle">@style/Widget.EmbarqueFacil.Button</item>
     </style>
