@@ -4,6 +4,38 @@ import { clearKioskSession, consumeCode, requestHelp, subscribeState, totemId, t
 
 type Screen = 'welcome' | 'code' | 'confirm' | 'route' | 'help' | 'done'
 
+function speakInBrazilianPortuguese(text: string) {
+  if (!('speechSynthesis' in window)) return
+  const synthesizer = window.speechSynthesis
+  synthesizer.cancel()
+
+  let spoken = false
+  const start = () => {
+    if (spoken) return
+    spoken = true
+    const utterance = new SpeechSynthesisUtterance(text)
+    const voices = synthesizer.getVoices()
+    const brazilianVoices = voices.filter((voice) => voice.lang.replace('_', '-').toLowerCase() === 'pt-br')
+    const portugueseVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith('pt'))
+    utterance.voice = brazilianVoices.find((voice) => /francisca|google.*portugu[eê]s|maria|luciana/i.test(voice.name))
+      || brazilianVoices.find((voice) => voice.localService)
+      || brazilianVoices[0]
+      || portugueseVoices.find((voice) => voice.localService)
+      || portugueseVoices[0]
+      || null
+    utterance.lang = utterance.voice?.lang || 'pt-BR'
+    utterance.rate = 0.92
+    utterance.pitch = 1
+    synthesizer.speak(utterance)
+  }
+
+  if (synthesizer.getVoices().length > 0) start()
+  else {
+    synthesizer.addEventListener('voiceschanged', start, { once: true })
+    window.setTimeout(start, 400)
+  }
+}
+
 function Icon({ name, size = 28 }: { name: string; size?: number }) {
   const icons: Record<string, ReactNode> = {
     arrow: <><path d="M5 12h14M13 6l6 6-6 6"/></>, back: <><path d="m15 18-6-6 6-6"/></>,
@@ -58,7 +90,7 @@ function RouteScreen({ state, accessible, onHelp, onEnd }: { state: DemoState; a
   const [showAlert, setShowAlert] = useState(Boolean(trip.previousPlatform && alert))
   const steps = accessible ? ['Siga em frente pelo corredor principal', 'Use o elevador ao lado da cafeteria', `Vire à direita para a plataforma ${trip.platform}`] : ['Siga em frente por cerca de 40 metros', 'Suba pela escada rolante do setor B', `Vire à direita para a plataforma ${trip.platform}`]
   useEffect(() => { if (trip.previousPlatform) setShowAlert(true) }, [trip.platform, trip.previousPlatform])
-  const speak = () => { if ('speechSynthesis' in window) { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(`Siga em frente. ${steps.join('. ')}`)) } }
+  const speak = () => speakInBrazilianPortuguese(`Siga em frente. ${steps.join('. ')}.`)
   return <main className="route-screen"><div className="route-head"><div><span className="k-eyebrow">ORIENTAÇÃO ATIVA</span><h1>Você está a caminho da plataforma <b>{trip.platform}</b></h1><p>Saída às {trip.departureTime} · Portão fecha às {trip.gateClosesAt}</p></div><div className="route-actions"><button onClick={speak}><Icon name="sound" size={22}/>Ouvir instruções</button><button className="help-action" onClick={onHelp}><Icon name="help" size={22}/>Pedir ajuda</button></div></div><div className="route-layout"><section className="map-panel"><RouteMap platform={trip.platform} accessible={accessible}/><div className="map-caption"><span className="pulse-dot"/><div><strong>Você está aqui</strong><small>Totem Entrada A · Piso térreo</small></div><div className="estimate"><small>DISTÂNCIA</small><strong>~ 4 min</strong></div></div></section><section className="steps-panel"><span className="k-eyebrow">PASSO A PASSO</span><h2>Um caminho simples até o embarque</h2><ol>{steps.map((step, index) => <li key={step} className={index === 0 ? 'current' : ''}><span>{index + 1}</span><div><strong>{step}</strong><small>{index === 0 ? 'aprox. 40 m' : index === 1 ? 'setor B' : 'destino final'}</small></div>{index === 0 && <em>AGORA</em>}</li>)}</ol><button className="phone-button"><Icon name="phone" size={22}/><div><strong>Continuar no celular</strong><small>Gere um QR para levar a rota</small></div><Icon name="arrow" size={18}/></button><button className="end-link" onClick={onEnd}>Encerrar e apagar meus dados</button></section></div>
     {showAlert && trip.previousPlatform && <div className="critical-backdrop"><section className="critical-modal"><span className="alert-badge">MUDANÇA IMPORTANTE</span><h2>Sua plataforma mudou</h2><p>{alert?.message || 'A operação atualizou o local do seu embarque.'}</p><div className="change"><div><small>ANTES</small><strong>{trip.previousPlatform}</strong></div><Icon name="arrow" size={34}/><div className="new"><small>AGORA</small><strong>{trip.platform}</strong></div></div><div className="new-step"><span>1</span><div><small>PRIMEIRO PASSO</small><strong>Siga em frente até o setor B. Atualizamos sua rota.</strong></div></div><button className="k-primary alert-confirm" onClick={() => setShowAlert(false)}>Entendi, mostrar nova rota <Icon name="arrow"/></button></section></div>}
   </main>

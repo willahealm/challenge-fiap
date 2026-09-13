@@ -24,4 +24,6 @@ VITE_TOTEM_ID=totem-tiete-01
 
 O totem não persiste token, passageiro ou localizador. O token kiosk fica apenas em memória e é descartado ao encerrar ou expirar a sessão. `VITE_TOTEM_API_URL` continua aceito como alias legado.
 
+O botão **Ouvir instruções** solicita explicitamente síntese `pt-BR`, prioriza vozes brasileiras locais e usa uma voz portuguesa como fallback. Em instalações kiosk, mantenha ao menos uma voz portuguesa instalada no sistema operacional.
+
 Em produção, o navegador invoca `embarque-api` pelo gateway oficial do Appwrite; a identidade demo do totem é validada na Function e nenhum segredo de servidor é distribuído.
