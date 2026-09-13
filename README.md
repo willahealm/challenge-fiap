@@ -49,25 +49,41 @@ O Appwrite será a plataforma central: autenticação, Teams, dados, Storage, Re
 - [Roteiro do pitch](docs/06-pitch.md)
 - [Checklist do Appwrite](appwrite/README.md)
 
-## Executar a demonstração web
+## Executar o MVP
 
-```bash
+Inicie a API em um terminal:
+
+```powershell
+cd apps/api
+.\gradlew.bat bootRun --console=plain
+```
+
+Depois, na raiz do repositório:
+
+```powershell
 npm install
+$env:VITE_API_BASE_URL = "http://127.0.0.1:8080"
 npm run dev
 ```
 
-- Dashboard operacional: `http://localhost:5173` (modo demo no login).
-- Totem: `http://localhost:5174` (código `EF4821`).
-- O servidor local em `http://localhost:3100` sincroniza plataforma e ajuda entre os apps.
+- Dashboard operacional: `http://localhost:5173`.
+- Totem: `http://localhost:5174`.
+- Operador: `operador@demo.local` / `Operador123!`.
+- Passageiro: `lucas@demo.local` / `Demo123!`.
+- Totem técnico: `totem@demo.local` / `Totem123!`.
+- Sem a API, o modo demo web usa o servidor local sincronizado incluído no monorepo.
+- APK Android: `apps/mobile/app/build/outputs/apk/debug/app-debug.apk`.
 
-Use `npm run build`, `npm run lint` e `npm test` para validar a entrega. As variáveis de integração com a API Java estão documentadas nos READMEs de `apps/dashboard` e `apps/totem`.
+Use `npm run build`, `npm run lint` e `npm test` para validar a Web. Os READMEs de `apps/api` e `apps/mobile` documentam smoke test, Android Studio/ADB, modo offline e o contorno para bloqueios de arquivos do OneDrive.
 
 ## Estado atual
 
-- Protótipo HTML: existente, navegável e útil como referência visual.
-- Produto: escopo revisado e priorizado.
-- Dashboard e totem: implementados em React + TypeScript, com integração à API e fallback local sincronizado para o pitch.
-- Appwrite: configuração opcional para o modo integrado; nenhuma chave de servidor entra nos bundles web.
+- Protótipo HTML: preservado como referência visual.
+- API Java/Spring Boot: executável com seed em memória, autorização por papel, handoff, alertas, ajuda, feedback, reset e 21 testes.
+- Dashboard e totem: implementados em React + TypeScript, integrados à API real e com fallback local sincronizado.
+- Android Java/XML: fluxo completo, modo offline, QR/código, orientação por sensor e APK validado para Android 8–16.
+- Contratos: OpenAPI, JSON Schema e tipos TypeScript em `packages/contracts`.
+- Appwrite: integração de produção continua planejada; o MVP local não depende de credenciais externas.
 
 ## Regra de entrega
 
