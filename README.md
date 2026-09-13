@@ -10,7 +10,7 @@ O repositório começou como um protótipo visual em `generated-page.html`. A an
 
 **Fluxo principal do pitch:**
 
-1. Passageiro entra com e-mail e senha pelo Appwrite Auth.
+1. Passageiro entra com credenciais demo validadas pela Function no Appwrite.
 2. Adiciona uma viagem manualmente ou abre a viagem de demonstração.
 3. Vê horário recomendado de saída e checklist de embarque.
 4. Ao chegar, escaneia um QR code do terminal.
@@ -37,7 +37,7 @@ appwrite/       modelo, permissões e checklist de configuração
 docs/           produto, telas, backlog, arquitetura e pitch
 ```
 
-O Appwrite será a plataforma central: autenticação, Teams, dados, Storage, Realtime, Messaging, Functions, permissões e hospedagem web. A API Java concentra regras privilegiadas, validações, cálculo de status e integrações. Chaves de API nunca entram no dashboard, totem ou app Android.
+Nesta entrega, o Appwrite é a plataforma hospedada: Sites serve as duas interfaces, a Function Node 22 concentra API/autenticação demo e o Database mantém o estado compartilhado. A API Java permanece como implementação local de referência e suíte contratual. Chaves de API nunca entram no dashboard, totem ou app Android.
 
 ## Documentos executáveis
 
@@ -50,6 +50,15 @@ O Appwrite será a plataforma central: autenticação, Teams, dados, Storage, Re
 - [Checklist do Appwrite](appwrite/README.md)
 
 ## Executar o MVP
+
+Versão pública gratuita:
+
+- Dashboard: <https://6aa71354cd7cb8842211.appwrite.network/>
+- Totem: <https://6aa713f546bfdd6cc784.appwrite.network/> — use `EF4821`
+
+No dashboard, use o botão **Entrar no modo demonstração** ou `operador@demo.local` / `Operador123!`.
+
+### Ambiente local
 
 Inicie a API em um terminal:
 
@@ -83,7 +92,7 @@ Use `npm run build`, `npm run lint` e `npm test` para validar a Web. Os READMEs 
 - Dashboard e totem: implementados em React + TypeScript, integrados à API real e com fallback local sincronizado.
 - Android Java/XML: fluxo completo, modo offline, QR/código, orientação por sensor e APK validado para Android 8–16.
 - Contratos: OpenAPI, JSON Schema e tipos TypeScript em `packages/contracts`.
-- Appwrite: integração de produção continua planejada; o MVP local não depende de credenciais externas.
+- Appwrite Cloud: Database, Function Node 22 e dois Sites ativos; autenticação demo demonstrável e estado persistente compartilhado. Auth real por usuário permanece como evolução pós-MVP.
 
 ## Regra de entrega
 

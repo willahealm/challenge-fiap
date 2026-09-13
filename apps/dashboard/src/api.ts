@@ -1,9 +1,34 @@
 import { seedState, setHelpStatus, updatePlatform, type DemoState, type HelpStatus } from '@embarque-facil/web-core'
 
 const explicitApi = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL) as string | undefined
-export const apiBase = explicitApi || '/demo-api'
+const appwriteEndpoint = ((import.meta.env.VITE_APPWRITE_ENDPOINT as string | undefined) || '').replace(/\/$/, '')
+const appwriteProjectId = (import.meta.env.VITE_APPWRITE_PROJECT_ID as string | undefined) || ''
+const appwriteFunctionId = (import.meta.env.VITE_APPWRITE_FUNCTION_ID as string | undefined) || ''
+const usesAppwrite = Boolean(appwriteEndpoint && appwriteProjectId && appwriteFunctionId)
+export const apiBase = explicitApi || (usesAppwrite ? '' : '/demo-api')
 const storageKey = 'embarque-facil:dashboard:v1'
-const isSharedDemo = !explicitApi || apiBase.includes(':3100')
+const isSharedDemo = (!explicitApi && !usesAppwrite) || apiBase.includes(':3100')
+
+async function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
+  if (!usesAppwrite) return fetch(path, init)
+  const requestHeaders = Object.fromEntries(new Headers(init.headers).entries())
+  const execution = await fetch(`${appwriteEndpoint}/functions/${appwriteFunctionId}/executions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': appwriteProjectId },
+    body: JSON.stringify({
+      async: false,
+      path: path.startsWith('http') ? new URL(path).pathname : path,
+      method: init.method || 'GET',
+      headers: requestHeaders,
+      body: typeof init.body === 'string' ? init.body : '',
+    }),
+  })
+  if (!execution.ok) return execution
+  const result = await execution.json()
+  const responseHeaders = new Headers()
+  for (const header of result.responseHeaders || []) responseHeaders.set(header.name, header.value)
+  return new Response(result.responseBody || '', { status: result.responseStatusCode || 500, headers: responseHeaders })
+}
 
 const localRead = (): DemoState => {
   const value = localStorage.getItem(storageKey)
@@ -31,26 +56,26 @@ export interface Session { accessToken: string; user: { name: string; role: stri
 
 export async function signIn(email: string, password: string): Promise<Session> {
   if (isSharedDemo) return { accessToken: 'demo-operator', user: { name: 'Marina Costa', role: 'operator' } }
-  const response = await fetch(`${apiBase}/v1/auth/demo`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) })
+  const response = await apiFetch(`${apiBase}/v1/auth/demo`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) })
   if (!response.ok) throw new Error('E-mail, senha ou permissão de operador inválidos.')
   return response.json()
 }
 
 export async function signOut(token?: string): Promise<void> {
   if (isSharedDemo || !token) return
-  try { await fetch(`${apiBase}/v1/auth/session`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }) } catch { /* local state is cleared regardless */ }
+  try { await apiFetch(`${apiBase}/v1/auth/session`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }) } catch { /* local state is cleared regardless */ }
 }
 
 export async function loadState(token?: string): Promise<{ state: DemoState; offline: boolean }> {
   try {
     if (isSharedDemo) {
-      const response = await fetch(`${apiBase}/state`)
+      const response = await apiFetch(`${apiBase}/state`)
       if (!response.ok) throw new Error()
       return { state: await response.json(), offline: false }
     }
     const auth = { Authorization: `Bearer ${token}` }
     const [tripsResponse, helpResponse] = await Promise.all([
-      fetch(`${apiBase}/v1/ops/trips`, { headers: auth }), fetch(`${apiBase}/v1/ops/help-requests`, { headers: auth }),
+      apiFetch(`${apiBase}/v1/ops/trips`, { headers: auth }), apiFetch(`${apiBase}/v1/ops/help-requests`, { headers: auth }),
     ])
     if (!tripsResponse.ok || !helpResponse.ok) throw new Error()
     const trips = (await tripsResponse.json()).map(mapTrip)
@@ -77,7 +102,7 @@ export function subscribe(onState: (state: DemoState) => void, token?: string): 
 export async function publishPlatform(state: DemoState, tripId: string, platform: string, message: string, token?: string): Promise<DemoState> {
   try {
     const endpoint = isSharedDemo ? `${apiBase}/trips/${tripId}/platform` : `${apiBase}/v1/ops/trips/${tripId}/alerts`
-    const response = await fetch(endpoint, { method: isSharedDemo ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify({ type: 'PLATFORM_CHANGE', severity: 'CRITICAL', platform, message }) })
+    const response = await apiFetch(endpoint, { method: isSharedDemo ? 'PATCH' : 'POST', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify({ type: 'PLATFORM_CHANGE', severity: 'CRITICAL', platform, message }) })
     if (!response.ok) throw new Error()
     if (isSharedDemo) return response.json()
     return updatePlatform(state, tripId, platform, message)
@@ -88,7 +113,7 @@ export async function changeHelpStatus(state: DemoState, requestId: string, stat
   try {
     const endpoint = isSharedDemo ? `${apiBase}/help-requests/${requestId}` : `${apiBase}/v1/ops/help-requests/${requestId}`
     const wireStatus = status === 'assigned' ? 'ACKNOWLEDGED' : 'RESOLVED'
-    const response = await fetch(endpoint, { method: 'PATCH', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify({ status: isSharedDemo ? status : wireStatus }) })
+    const response = await apiFetch(endpoint, { method: 'PATCH', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify({ status: isSharedDemo ? status : wireStatus }) })
     if (!response.ok) throw new Error()
     return isSharedDemo ? response.json() : setHelpStatus(state, requestId, status)
   } catch { return localWrite(setHelpStatus(state, requestId, status)) }
@@ -97,10 +122,10 @@ export async function changeHelpStatus(state: DemoState, requestId: string, stat
 export async function resetDemo(token?: string): Promise<{ state: DemoState; session?: Session }> {
   try {
     if (isSharedDemo) {
-      const response = await fetch(`${apiBase}/reset`, { method: 'POST' })
+      const response = await apiFetch(`${apiBase}/reset`, { method: 'POST' })
       if (response.ok) return { state: await response.json() }
     } else if (token) {
-      const response = await fetch(`${apiBase}/v1/demo/reset`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
+      const response = await apiFetch(`${apiBase}/v1/demo/reset`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } })
       if (response.ok) {
         const session = await signIn('operador@demo.local', 'Operador123!')
         const result = await loadState(session.accessToken)

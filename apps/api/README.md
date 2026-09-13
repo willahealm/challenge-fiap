@@ -52,13 +52,13 @@ Operador vê viagens operacionais e chamados, sem listagem nominal. Passageiro n
 
 ## Sincronização e reset
 
-Clientes consultam a visão consolidada e chamados a cada dois segundos, com botão Atualizar como fallback. Não há WebSocket, Appwrite Realtime, push, Messaging, Storage ou Functions ativos. Rotas são instruções estáticas curadas, não GPS.
+Clientes consultam a visão consolidada e chamados a cada dois segundos, com botão Atualizar como fallback. Na versão local não há WebSocket, Realtime, push, Messaging ou Storage. A versão pública equivalente usa a Function Node 22 `embarque-api` e o Database do Appwrite. Rotas são instruções estáticas curadas, não GPS.
 
 `POST /v1/demo/reset`, autenticado como OPERATOR, limpa alertas, chamados, feedback, handoffs, checklist e estágios; restaura plataforma 18 e revoga **todas** as sessões, inclusive a do operador. Retorna `{status: "RESET", tripId: "trip-demo", journeyId: "journey-demo"}`. É idempotente no estado dos dados; cada nova chamada precisa de nova sessão do operador. Reiniciar também executa seed. Reset mantém limites de tentativas para evitar contorno; aguarde a janela de um minuto se necessário.
 
 ## Perfis Appwrite e produção
 
-Somente `demo` está implementado. `SPRING_PROFILES_ACTIVE=appwrite` ou `production` falha explicitamente; combinar esses perfis com `demo` também é recusado. Configurar secrets não habilita persistência automaticamente.
+No backend Spring, somente `demo` está implementado. `SPRING_PROFILES_ACTIVE=appwrite` ou `production` falha explicitamente; combinar esses perfis com `demo` também é recusado. O deploy público usa uma implementação Node separada em `../../appwrite/functions/api`, preservando a API principal sem expor o servidor Java.
 
 Próxima etapa: manter contratos e extrair adapters de autenticação e persistência:
 

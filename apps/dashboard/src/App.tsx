@@ -24,7 +24,7 @@ function Login({ onLogin }: { onLogin: (session: Session) => void }) {
     <section className="login-story">
       <Logo />
       <div><span className="eyebrow light">CENTRAL OPERACIONAL</span><h1>A jornada fica simples quando a operação enxerga o todo.</h1><p>Monitore viagens, publique mudanças e responda pedidos de ajuda sem expor dados do passageiro.</p></div>
-      <div className="story-card"><Icon name="spark" size={24}/><div><strong>Demonstração sincronizada</strong><span>Dashboard e totem compartilham o mesmo estado local.</span></div></div>
+      <div className="story-card"><Icon name="spark" size={24}/><div><strong>Demonstração sincronizada</strong><span>Dashboard e totem compartilham o mesmo estado no Appwrite.</span></div></div>
     </section>
     <section className="login-panel"><form onSubmit={(event) => { event.preventDefault(); void submit() }}>
       <span className="eyebrow">ACESSO RESTRITO</span><h2>Olá, operação.</h2><p>Entre com uma conta do time de operadores.</p>

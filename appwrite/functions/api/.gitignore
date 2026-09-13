@@ -1,0 +1,4 @@
+.appwrite/
+build/
+*.class
+*.jar

@@ -24,7 +24,7 @@ O MVP só precisa provar uma história completa:
 14. Pedido de ajuda que chega contextualizado ao dashboard.
 15. Modo direção com seta para o próximo marco, instrução textual e indicador de confiança do sensor.
 16. Push via Appwrite Messaging para alertas críticos quando o app estiver em segundo plano.
-17. Assets de terminal servidos pelo Appwrite Storage e rotinas automáticas executadas por Appwrite Functions em Java.
+17. Assets de terminal servidos pelo Appwrite Storage e rotinas automáticas executadas por Appwrite Functions em Node.js 22.
 
 ## P1 — somente se P0 estiver estável
 

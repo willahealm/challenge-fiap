@@ -2,6 +2,8 @@
 
 Painel React + TypeScript do Embarque Fácil. Lista as viagens do dia, publica troca de plataforma e recebe pedidos de ajuda contextuais do totem.
 
+Publicado no Appwrite Sites: <https://6aa71354cd7cb8842211.appwrite.network/>.
+
 ## Executar
 
 Na raiz do repositório:
@@ -22,3 +24,5 @@ VITE_API_BASE_URL=http://127.0.0.1:8080
 ```
 
 Se a API não responder, o app sinaliza o modo offline e mantém uma cópia seed local para o pitch. `VITE_API_URL` continua aceito como alias legado.
+
+Em produção, `VITE_APPWRITE_ENDPOINT`, `VITE_APPWRITE_PROJECT_ID` e `VITE_APPWRITE_FUNCTION_ID` ativam o gateway oficial de execuções da Function, sem chave secreta no bundle.
