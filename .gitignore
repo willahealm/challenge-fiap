@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+build/
+.gradle/
+.idea/
+*.iml
+local.properties
+*.jks
+*.keystore
+coverage/
+.DS_Store
+Thumbs.db
