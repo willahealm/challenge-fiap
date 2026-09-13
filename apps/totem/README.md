@@ -2,7 +2,7 @@
 
 Aplicação React + TypeScript para navegador Chromium em modo kiosk/touch. O fluxo inclui atração, entrada do código, confirmação mínima, orientação acessível, mudança crítica de plataforma, pedido de ajuda e limpeza automática em 30 segundos.
 
-Publicado no Appwrite Sites: <https://6aa713f546bfdd6cc784.appwrite.network/>. Use `EF4821` para a demonstração hospedada.
+Publicado no Appwrite Sites: <https://6aa7174f16d81c6df2d9.appwrite.network/>. Use `EF4821` para a demonstração hospedada.
 
 ## Executar
 

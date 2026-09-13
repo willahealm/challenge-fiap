@@ -53,8 +53,8 @@ Nesta entrega, o Appwrite é a plataforma hospedada: Sites serve as duas interfa
 
 Versão pública gratuita:
 
-- Dashboard: <https://6aa71354cd7cb8842211.appwrite.network/>
-- Totem: <https://6aa713f546bfdd6cc784.appwrite.network/> — use `EF4821`
+- Dashboard: <https://6aa714cc2cb488fb8cbc.appwrite.network/>
+- Totem: <https://6aa7174f16d81c6df2d9.appwrite.network/> — use `EF4821`
 
 No dashboard, use o botão **Entrar no modo demonstração** ou `operador@demo.local` / `Operador123!`.
 

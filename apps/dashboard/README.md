@@ -2,7 +2,7 @@
 
 Painel React + TypeScript do Embarque Fácil. Lista as viagens do dia, publica troca de plataforma e recebe pedidos de ajuda contextuais do totem.
 
-Publicado no Appwrite Sites: <https://6aa71354cd7cb8842211.appwrite.network/>.
+Publicado no Appwrite Sites: <https://6aa714cc2cb488fb8cbc.appwrite.network/>.
 
 ## Executar
 
