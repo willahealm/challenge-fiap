@@ -16,6 +16,7 @@ import br.com.fiap.embarquefacil.data.model.JourneyDetails;
 import br.com.fiap.embarquefacil.data.model.Feedback;
 import br.com.fiap.embarquefacil.data.model.Trip;
 import br.com.fiap.embarquefacil.data.remote.ApiService;
+import br.com.fiap.embarquefacil.data.remote.AppwriteGatewayInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -44,6 +45,7 @@ public class RemoteRepository implements JourneyRepository {
                     }
                     return chain.proceed(builder.build());
                 })
+                .addInterceptor(new AppwriteGatewayInterceptor())
                 .addInterceptor(logging)
                 .build();
         api = new Retrofit.Builder()

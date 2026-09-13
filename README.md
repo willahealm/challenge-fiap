@@ -90,7 +90,7 @@ Use `npm run build`, `npm run lint` e `npm test` para validar a Web. Os READMEs 
 - Protótipo HTML: preservado como referência visual.
 - API Java/Spring Boot: executável com seed em memória, autorização por papel, handoff, alertas, ajuda, feedback, reset e 21 testes.
 - Dashboard e totem: implementados em React + TypeScript, integrados à API real e com fallback local sincronizado.
-- Android Java/XML: fluxo completo, modo offline, QR/código, orientação por sensor e APK validado para Android 8–16.
+- Android Java/XML: fluxo completo, gateway da Function Appwrite, modo offline, QR/código, orientação por sensor e APK validado para Android 8–16.
 - Contratos: OpenAPI, JSON Schema e tipos TypeScript em `packages/contracts`.
 - Appwrite Cloud: Database, Function Node 22 e dois Sites ativos; autenticação demo demonstrável e estado persistente compartilhado. Auth real por usuário permanece como evolução pós-MVP.
 

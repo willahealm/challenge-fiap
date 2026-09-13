@@ -2,6 +2,24 @@ plugins {
     id "com.android.application"
 }
 
+def repoEnv = new Properties()
+def repoEnvFile = rootProject.file("../../.env")
+if (repoEnvFile.exists()) {
+    repoEnvFile.withInputStream { repoEnv.load(it) }
+}
+def envValue = { String name, String fallback ->
+    System.getenv(name) ?: repoEnv.getProperty(name, fallback)
+}
+def javaString = { String value ->
+    '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
+}
+def appwriteEndpoint = envValue("APPWRITE_ENDPOINT", "https://fra.cloud.appwrite.io/v1").replaceAll('/+$', '')
+def appwriteProjectId = envValue("APPWRITE_PROJECT_ID", "")
+def appwriteFunctionId = envValue("APPWRITE_FUNCTION_ID", "")
+def useAppwriteGateway = !appwriteProjectId.isBlank() && !appwriteFunctionId.isBlank()
+def androidApiUrl = envValue("ANDROID_API_URL", appwriteEndpoint) + "/"
+def androidDemoDefault = envValue("ANDROID_DEMO_MODE_DEFAULT", useAppwriteGateway ? "false" : "true")
+
 android {
     namespace "br.com.fiap.embarquefacil"
     compileSdk 36
@@ -12,8 +30,12 @@ android {
         versionCode 1
         versionName "1.0.0-demo"
 
-        buildConfigField "String", "DEFAULT_API_URL", '"http://10.0.2.2:8080/"'
-        buildConfigField "boolean", "DEMO_MODE_DEFAULT", "true"
+        buildConfigField "String", "DEFAULT_API_URL", javaString(androidApiUrl)
+        buildConfigField "boolean", "DEMO_MODE_DEFAULT", androidDemoDefault
+        buildConfigField "boolean", "USE_APPWRITE_GATEWAY", useAppwriteGateway.toString()
+        buildConfigField "String", "APPWRITE_ENDPOINT", javaString(appwriteEndpoint)
+        buildConfigField "String", "APPWRITE_PROJECT_ID", javaString(appwriteProjectId)
+        buildConfigField "String", "APPWRITE_FUNCTION_ID", javaString(appwriteFunctionId)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

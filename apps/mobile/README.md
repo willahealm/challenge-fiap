@@ -1,6 +1,6 @@
 # Embarque Fácil — Android
 
-Aplicativo passageiro do MVP em Android nativo: Java, Android SDK e layouts XML. O app funciona contra a API local do monorepo ou inteiramente offline com um roteiro determinístico para o pitch.
+Aplicativo passageiro do MVP em Android nativo: Java, Android SDK e layouts XML. O app funciona conectado à Function no Appwrite, contra a API local do monorepo ou inteiramente offline com um roteiro determinístico para o pitch.
 
 ## O que está implementado
 
@@ -25,6 +25,20 @@ O cliente segue `packages/contracts/openapi.json`. Não contém API keys, senha 
 - Android Studio ou `ANDROID_HOME` apontando para um SDK válido.
 
 O Gradle Wrapper 9.1.0 está versionado; não é necessário instalar Gradle globalmente.
+
+## Rodar com o Appwrite Cloud
+
+O Gradle lê o `.env` da raiz do repositório. Para usar o mesmo backend publicado do dashboard e do totem:
+
+```dotenv
+APPWRITE_ENDPOINT=https://fra.cloud.appwrite.io/v1
+APPWRITE_PROJECT_ID=6aa6f5a70039265e6516
+APPWRITE_FUNCTION_ID=embarque-api
+ANDROID_API_URL=https://fra.cloud.appwrite.io/v1
+ANDROID_DEMO_MODE_DEFAULT=false
+```
+
+Compile e instale o APK. Na primeira abertura, mantenha o modo offline desativado e entre com `lucas@demo.local` / `Demo123!`. O cliente transforma as chamadas Retrofit em execuções síncronas da Function e restaura o status, headers e corpo HTTP. Project ID e Function ID são identificadores públicos; nenhuma API key é incorporada.
 
 ## Build e testes
 
