@@ -49,12 +49,25 @@ O Appwrite será a plataforma central: autenticação, Teams, dados, Storage, Re
 - [Roteiro do pitch](docs/06-pitch.md)
 - [Checklist do Appwrite](appwrite/README.md)
 
+## Executar a demonstração web
+
+```bash
+npm install
+npm run dev
+```
+
+- Dashboard operacional: `http://localhost:5173` (modo demo no login).
+- Totem: `http://localhost:5174` (código `EF4821`).
+- O servidor local em `http://localhost:3100` sincroniza plataforma e ajuda entre os apps.
+
+Use `npm run build`, `npm run lint` e `npm test` para validar a entrega. As variáveis de integração com a API Java estão documentadas nos READMEs de `apps/dashboard` e `apps/totem`.
+
 ## Estado atual
 
 - Protótipo HTML: existente, navegável e útil como referência visual.
 - Produto: escopo revisado e priorizado.
-- Appwrite: projeto existe, mas ainda não tem apps, usuários, banco ou chave.
-- API, dashboard e Android: estrutura planejada; implementação ainda não iniciada.
+- Dashboard e totem: implementados em React + TypeScript, com integração à API e fallback local sincronizado para o pitch.
+- Appwrite: configuração opcional para o modo integrado; nenhuma chave de servidor entra nos bundles web.
 
 ## Regra de entrega
 

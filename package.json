@@ -1,0 +1,28 @@
+{
+  "name": "embarque-facil",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/dashboard",
+    "apps/totem",
+    "packages/web-core"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:dashboard": "npm run dev -w @embarque-facil/dashboard",
+    "dev:totem": "npm run dev -w @embarque-facil/totem",
+    "dev:demo-server": "node packages/web-core/demo-server.mjs",
+    "build": "npm run build -w @embarque-facil/dashboard && npm run build -w @embarque-facil/totem",
+    "lint": "npm run lint -w @embarque-facil/dashboard && npm run lint -w @embarque-facil/totem",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@types/node": "^24.3.1",
+    "eslint": "^9.35.0",
+    "globals": "^16.3.0",
+    "typescript-eslint": "^8.42.0",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,14 +1,23 @@
 # Totem de autoatendimento
 
-Aplicação React + TypeScript independente, executada em navegador Chromium em modo kiosk/touch.
+Aplicação React + TypeScript para navegador Chromium em modo kiosk/touch. O fluxo inclui atração, entrada do código, confirmação mínima, orientação acessível, mudança crítica de plataforma, pedido de ajuda e limpeza automática em 30 segundos.
 
-Primeiro marco funcional:
+## Executar
 
-1. Tela de atração e seleção de acessibilidade/idioma.
-2. Consumo de QR/código temporário gerado no Android.
-3. Exibição da viagem e da rota a partir do ponto físico do totem.
-4. Atualização de plataforma por Realtime.
-5. Pedido de ajuda contextualizado.
-6. Encerramento e limpeza automática por inatividade.
+Na raiz:
 
-O totem nunca usa a sessão do dashboard, não mantém dados pessoais em armazenamento local e deve funcionar também com código digitado quando câmera/leitor falhar.
+```bash
+npm install
+npm run dev
+```
+
+Abra `http://localhost:5174` e use o código `EF4821`. O comando também inicia o dashboard e o servidor demo compartilhado. Uma troca para a plataforma 21 publicada no dashboard aparece no totem imediatamente.
+
+Para usar a API Java, crie `apps/totem/.env.local`:
+
+```env
+VITE_TOTEM_API_URL=http://localhost:8080
+VITE_TOTEM_ID=totem-tiete-01
+```
+
+O totem não persiste token, passageiro ou localizador. O token kiosk fica apenas em memória e é descartado ao encerrar ou expirar a sessão.
