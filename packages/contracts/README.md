@@ -1,3 +1,3 @@
 # Contracts
 
-Schemas e tipos compartilhados entre API e dashboard. O Android mantém DTOs equivalentes gerados ou versionados a partir do contrato OpenAPI da API.
+Contrato OpenAPI e schemas independentes de linguagem. A API Java implementa o contrato; dashboard/totem geram tipos TypeScript e o Android gera ou mantém DTOs Java equivalentes.

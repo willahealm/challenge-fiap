@@ -29,7 +29,7 @@ Mostrar o funil real do teste: participantes, conclusão sem ajuda, tempo e prin
 
 ### 4:10–4:40 — tecnologia
 
-Android nativo para o passageiro, dois apps React separados para operação e totem, Express para regras e Appwrite para autenticação, dados e eventos em tempo real. Destacar token de uso único, limpeza da sessão pública e ausência de biometria/localização contínua.
+Android nativo em Java para o passageiro, dois apps React separados para operação e totem, Spring Boot para regras e Appwrite como plataforma central de autenticação, dados, arquivos, realtime, push, Functions e hospedagem web. Destacar token de uso único, limpeza da sessão pública e ausência de biometria/localização contínua.
 
 ### 4:40–5:00 — próximos passos
 
@@ -62,9 +62,9 @@ Cada totem tem um ponto físico cadastrado; ao vincular a jornada, ele confirma 
 
 O totem aceita o código/localizador da passagem demo, orienta e pode gerar um resumo para fotografar ou imprimir. O sistema não substitui painel e atendimento; cria mais um canal e mede onde a ajuda humana continua necessária.
 
-**"Por que Appwrite e Express?"**
+**"Por que Appwrite e Java?"**
 
-Appwrite reduz o tempo de infraestrutura para auth, dados e realtime. Express mantém regras privilegiadas e cria uma fronteira estável para futuras integrações.
+Appwrite reduz o tempo de infraestrutura para autenticação, dados, arquivos, realtime, push e deploy. A API Java/Spring Boot mantém regras privilegiadas e cria uma fronteira estável para futuras integrações, usando tecnologias alinhadas ao curso.
 
 **"O que há de realmente inovador?"**
 

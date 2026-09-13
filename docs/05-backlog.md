@@ -5,8 +5,8 @@ Plano-base para 10 dias úteis, com quatro integrantes. Se houver menos tempo, e
 ## Papéis
 
 - **Produto/UX:** entrevistas, fluxos, textos, seed e roteiro do pitch.
-- **Mobile:** Android, autenticação, jornada, QR, direção por sensores e Realtime.
-- **Backend:** Express, Appwrite, permissões, seed e testes.
+- **Mobile:** Android em Java, autenticação, jornada, QR, direção por sensores e Realtime.
+- **Backend:** Java/Spring Boot, Appwrite, permissões, Functions, seed e testes.
 - **Dashboard/Totem/QA:** React, experiência kiosk, operação, E2E e evidências.
 
 Todo mundo revisa PR; uma pessoa é dona de cada história, não de uma camada inteira.
@@ -17,11 +17,11 @@ Todo mundo revisa PR; uma pessoa é dona de cada história, não de uma camada i
 
 - Rodar 3–5 entrevistas rápidas.
 - Fechar promessa, persona e história do pitch.
-- Criar apps Web/Android/server no Appwrite e database demo.
-- Inicializar monorepo, lint, formatação, CI e `.env.example`.
+- Criar apps Web/Android/server no Appwrite, database, buckets, Messaging e Sites demo.
+- Inicializar monorepo, Gradle, npm workspaces, lint, formatação, CI e `.env.example`.
 - Seedar terminal, totem, pontos, azimutes da rota e uma viagem.
 
-**Marco:** login nos dois clientes e `/health` funcionando.
+**Marco:** login nos clientes e `/actuator/health` funcionando.
 
 ### Dias 2–3 — fatia vertical
 
@@ -48,6 +48,7 @@ Todo mundo revisa PR; uma pessoa é dona de cada história, não de uma camada i
 - Formulário de alerta no dashboard.
 - Atualização atômica da plataforma + registro de alerta.
 - Realtime no Android e fallback de refresh.
+- Appwrite Messaging envia push quando o Android está em segundo plano.
 - Mudança aparece simultaneamente no totem vinculado.
 - Pedido de ajuda no totem aparece no dashboard.
 - Feedback pós-jornada.
@@ -57,6 +58,7 @@ Todo mundo revisa PR; uma pessoa é dona de cada história, não de uma camada i
 ### Dia 8 — qualidade
 
 - Testes unitários das regras e integração da API.
+- Testes Java de controller/service e permissões Appwrite.
 - Teste E2E web do login → publicar alerta.
 - Teste Android do caminho crítico em aparelho/emulador.
 - Revisão de acessibilidade e contraste.
@@ -94,6 +96,8 @@ Todo mundo revisa PR; uma pessoa é dona de cada história, não de uma camada i
 | P0-13 | Peço ajuda no totem | operador vê ponto e categoria | Realtime/dashboard |
 | P0-14 | Totem protege privacidade | inatividade limpa sessão | kiosk/API |
 | P0-15 | Seta aponta próximo marco | sensor ruim aciona fallback | rota/sensores |
+| P0-16 | Recebo alerta fora do app | push abre a jornada correta | Messaging/FCM |
+| P0-17 | Assets e rotinas são gerenciados | Storage e Function Java testados | Appwrite |
 
 ## Processo de Git
 

@@ -18,11 +18,13 @@ O MVP só precisa provar uma história completa:
 8. Alerta de mudança publicado pelo dashboard e recebido via Realtime.
 9. Dashboard com login de operador, viagens do dia e formulário de alerta.
 10. Avaliação de 1–5 e comentário opcional.
-11. API Express com healthcheck, autorização e endpoints de regra de negócio.
+11. API Java/Spring Boot com healthcheck, autorização e endpoints de regra de negócio.
 12. Totem React em modo kiosk com sessão efêmera, leitura/entrada de código e orientação.
 13. Sincronização do estágio e dos alertas entre mobile e totem.
 14. Pedido de ajuda que chega contextualizado ao dashboard.
 15. Modo direção com seta para o próximo marco, instrução textual e indicador de confiança do sensor.
+16. Push via Appwrite Messaging para alertas críticos quando o app estiver em segundo plano.
+17. Assets de terminal servidos pelo Appwrite Storage e rotinas automáticas executadas por Appwrite Functions em Java.
 
 ## P1 — somente se P0 estiver estável
 

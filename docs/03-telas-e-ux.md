@@ -47,7 +47,7 @@ Passos textuais curtos, seta, distância aproximada e botão "Ouvir instrução"
 - Ação "Recalibrar" ensina o movimento em oito.
 - Com confiança baixa persistente, trocar para instruções por etapas e pedir confirmação em outro QR/totem.
 
-O recurso usa o azimute cadastrado em cada trecho da rota e o sensor de rotação/bússola do aparelho. Não tenta estimar posição por GPS dentro do prédio.
+O recurso usa o azimute cadastrado em cada trecho da rota e os sensores Android acessados por Java. Não tenta estimar posição por GPS dentro do prédio.
 
 ### 6. Alerta operacional
 

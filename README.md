@@ -27,17 +27,17 @@ Este será um **monorepo**:
 
 ```text
 apps/
-  api/          Node.js + Express + TypeScript
+  api/          Java + Spring Boot
   dashboard/    React + TypeScript
   totem/        React PWA em modo kiosk/touch
-  mobile/       Android nativo + Kotlin + Jetpack Compose
+  mobile/       Android nativo + Java + layouts XML
 packages/
-  contracts/    schemas e tipos compartilhados pela API e dashboard
+  contracts/    OpenAPI e schemas compartilhados entre as aplicações
 appwrite/       modelo, permissões e checklist de configuração
 docs/           produto, telas, backlog, arquitetura e pitch
 ```
 
-O Appwrite será responsável por autenticação, dados, storage e realtime. O Express concentra regras de negócio privilegiadas, validações, cálculo de status e endpoints que usam credenciais de servidor. Chaves de API nunca entram no dashboard ou no app Android.
+O Appwrite será a plataforma central: autenticação, Teams, dados, Storage, Realtime, Messaging, Functions, permissões e hospedagem web. A API Java concentra regras privilegiadas, validações, cálculo de status e integrações. Chaves de API nunca entram no dashboard, totem ou app Android.
 
 ## Documentos executáveis
 
